@@ -14,11 +14,25 @@ static bool check_matrix_boundaries(matrix_u8_t *matrix, int i, int j) {
         && (j >= 0 && j < matrix->ncols);
 }
 
-matrix_u8_t *matrix_create(int nrows, int ncols) {
-    if (nrows <= 0 || ncols <= 0) return NULL;
+static bool compute_data_size(int a, int b, size_t *out) {
+    if (out == NULL || a < 0 || b < 0) return false;
+    
+    size_t r = (size_t)a;
+    size_t c = (size_t)b;
 
+    if (c != 0 && r > SIZE_MAX / c) return false;
+
+    *out = r * c;
+
+    return true;
+}
+
+matrix_u8_t *matrix_create(int nrows, int ncols) {
     size_t matrix_struct_size = sizeof(matrix_u8_t);
-    size_t data_size = sizeof(uint8_t) * (size_t)nrows * (size_t)ncols;
+    size_t data_size;
+    
+    if (!compute_data_size(nrows, ncols, &data_size)) return NULL;
+    if (data_size > SIZE_MAX - matrix_struct_size) return NULL;
     
     matrix_u8_t *matrix = calloc(1, matrix_struct_size + data_size);
     if (matrix == NULL) return NULL;
