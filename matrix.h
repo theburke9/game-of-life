@@ -8,7 +8,7 @@ typedef struct {
     uint8_t* data;  // data
     int nrows;      // number of rows
     int ncols;      // number of cols
-    size_t size;    // size in bytes of the matrix
+    size_t size;    // size in bytes of the data buffer
 } matrix_u8_t;
 
 matrix_u8_t *matrix_create(int nrows, int ncols);
