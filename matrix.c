@@ -4,28 +4,14 @@
 #include <string.h>
 #include <stdbool.h>
 
-static bool check_matrix_ptr(matrix_u8_t *matrix) {
-    return matrix != NULL && matrix->data != NULL;
-}
+static bool check_matrix_ptr(const matrix_u8_t *matrix);
+static bool check_matrix_boundaries(const matrix_u8_t *matrix, int i, int j);
+static bool compute_data_size(int a, int b, size_t *out);
+static size_t matrix_index(const matrix_u8_t *matrix, int i, int j);
 
-static bool check_matrix_boundaries(matrix_u8_t *matrix, int i, int j) {
-    return check_matrix_ptr(matrix) 
-        && (i >= 0 && i < matrix->nrows) 
-        && (j >= 0 && j < matrix->ncols);
-}
-
-static bool compute_data_size(int a, int b, size_t *out) {
-    if (out == NULL || a < 0 || b < 0) return false;
-    
-    size_t r = (size_t)a;
-    size_t c = (size_t)b;
-
-    if (c != 0 && r > SIZE_MAX / c) return false;
-
-    *out = r * c;
-
-    return true;
-}
+/**
+ * CREATION AND DESTRUCTION
+ */
 
 matrix_u8_t *matrix_create(int nrows, int ncols) {
     size_t matrix_struct_size = sizeof(matrix_u8_t);
@@ -49,17 +35,52 @@ void matrix_destroy(matrix_u8_t *matrix) {
     if (matrix) free(matrix);
 }
 
-uint8_t matrix_get(matrix_u8_t *matrix, int i, int j) {
+/**
+ * GETTER AND SETTER
+ */
+
+uint8_t matrix_get(const matrix_u8_t *matrix, int i, int j) {
     if (!check_matrix_boundaries(matrix, i, j)) return 0;
-    return matrix->data[j + i * matrix->ncols];
+    return matrix->data[matrix_index(matrix, i, j)];
 }
 
 void matrix_set(matrix_u8_t *matrix, int i, int j, uint8_t value) {
     if (!check_matrix_boundaries(matrix, i, j)) return;
-    matrix->data[j + i * matrix->ncols] = value;
+    matrix->data[matrix_index(matrix, i, j)] = value;
 }
 
 void matrix_fill(matrix_u8_t *matrix, uint8_t value) {
     if (!check_matrix_ptr(matrix)) return;
     memset(matrix->data, value, matrix->size);
+}
+
+/**
+ * STATIC FUNCTIONS
+ */
+
+static bool check_matrix_ptr(const matrix_u8_t *matrix) {
+    return matrix != NULL && matrix->data != NULL;
+}
+
+static bool check_matrix_boundaries(const matrix_u8_t *matrix, int i, int j) {
+    return check_matrix_ptr(matrix) 
+        && (i >= 0 && i < matrix->nrows) 
+        && (j >= 0 && j < matrix->ncols);
+}
+
+static bool compute_data_size(int a, int b, size_t *out) {
+    if (out == NULL || a < 0 || b < 0) return false;
+    
+    size_t r = (size_t)a;
+    size_t c = (size_t)b;
+
+    if (c != 0 && r > SIZE_MAX / c) return false;
+
+    *out = r * c;
+
+    return true;
+}
+
+static size_t matrix_index(const matrix_u8_t *matrix, int i, int j) {
+    return (size_t)i * matrix->ncols + (size_t)j;
 }

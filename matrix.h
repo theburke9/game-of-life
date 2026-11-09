@@ -14,7 +14,7 @@ typedef struct {
 matrix_u8_t *matrix_create(int nrows, int ncols);
 void matrix_destroy(matrix_u8_t *matrix);
 
-uint8_t matrix_get(matrix_u8_t *matrix, int i, int j);
+uint8_t matrix_get(const matrix_u8_t *matrix, int i, int j);
 void matrix_set(matrix_u8_t *matrix, int i, int j, uint8_t value);
 void matrix_fill(matrix_u8_t *matrix, uint8_t value);
 
