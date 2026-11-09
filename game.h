@@ -14,5 +14,6 @@ void game_destroy(game_t *game);
 
 void game_step(game_t *game);
 void game_render(game_t *game, SDL_Renderer *renderer);
+void game_click(game_t *game, int mouse_x, int mouse_y);
 
 #endif // GAME_H

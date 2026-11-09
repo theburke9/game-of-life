@@ -28,32 +28,41 @@ int main(int argc, char *argv[]) {
     }
             
     game_t *game = game_create(WINDOW_WIDTH, WINDOW_HEIGHT);
-    matrix_set(game->grids[0], 4, 3, 1);
-    matrix_set(game->grids[0], 5, 4, 1);
-    matrix_set(game->grids[0], 3, 5, 1);
-    matrix_set(game->grids[0], 4, 5, 1);
-    matrix_set(game->grids[0], 5, 5, 1);
 	
-	bool isRunning = true;
-    bool isPause = false;
-    while (isRunning) {
+	bool is_running = true;
+    bool is_pause = true;
+    while (is_running) {
 		SDL_Event event;
 		while(SDL_PollEvent(&event)) {
-			if (event.type == SDL_EVENT_QUIT) {
-				isRunning = false;
-			}
+            switch (event.type)
+            {
+                case SDL_EVENT_QUIT:
+                    is_running = false;
+                    break;
 
-            if (event.type == SDL_EVENT_KEY_DOWN) {
-                if (event.key.key == SDLK_SPACE) {
-                    isPause = !isPause;
-                }
+                case SDL_EVENT_KEY_DOWN:
+                    if (event.key.key == SDLK_SPACE) {
+                        is_pause = !is_pause;
+                    }
+                    break;
+
+                case SDL_EVENT_MOUSE_BUTTON_DOWN:
+                    if (event.button.button == SDL_BUTTON_LEFT && is_pause) {
+                        int mouseX = event.button.x;
+                        int mouseY = event.button.y;
+                        game_click(game, mouseX, mouseY);
+                    }
+                    break;
+                
+                default:
+                    break;
             }
 		}
 
         SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
         SDL_RenderClear(renderer);
 
-        if (!isPause)
+        if (!is_pause)
             game_step(game);
         
         game_render(game, renderer);
@@ -64,9 +73,7 @@ int main(int argc, char *argv[]) {
 	}
 
     game_destroy(game);
-
     SDL_DestroyWindow(window);
-
 	SDL_Quit();
 
 	return 0;

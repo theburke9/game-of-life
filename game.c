@@ -4,8 +4,8 @@
 #include <stdlib.h>
 #include <stdbool.h>
 
-#define BOX_W   40
-#define BOX_H   40
+#define BOX_W   20
+#define BOX_H   20
 
 static bool check_game_ptr(game_t *game);
 static int count_neighbors(matrix_u8_t *matrix, int i, int j);
@@ -85,6 +85,14 @@ void game_render(game_t *game, SDL_Renderer *renderer) {
             }
         }
     }
+}
+
+void game_click(game_t *game, int mouse_x, int mouse_y) {
+    if (!check_game_ptr(game)) return;
+    int block_x = mouse_x / BOX_W;
+    int block_y = mouse_y / BOX_H;
+    int cell = matrix_get(game->grids[game->current], block_x, block_y) != 0;
+    matrix_set(game->grids[game->current], block_x, block_y, !cell);
 }
 
 /* STATIC FUNCTIONS */
