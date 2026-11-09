@@ -42,7 +42,10 @@ game_t *game_create(int window_width, int window_height) {
 }
 
 void game_destroy(game_t *game) {
-    if (game) free(game);
+    if (game == NULL) return;
+    matrix_destroy(game->grids[0]);
+    matrix_destroy(game->grids[1]);
+    free(game);
 }
 
 /* STEP AND RENDERING */
