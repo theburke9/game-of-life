@@ -3,7 +3,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
-#include <string.h>
 
 #define BOX_W   20
 #define BOX_H   20
@@ -47,6 +46,7 @@ void game_step(game_t *game) {
     matrix_u8_t *buffer_to_write = game->watch_b0 ? game->b1 : game->b0;
     matrix_u8_t *buffer_to_watch = game->watch_b0 ? game->b0 : game->b1;  
 
+    // compute
     for (int i = 0; i < buffer_to_watch->nrows; ++i) {
         for (int j = 0; j < buffer_to_watch->ncols; ++j) {
             int n_neighbors = game_count_neighbors(buffer_to_watch, i, j);
@@ -58,16 +58,25 @@ void game_step(game_t *game) {
     game->watch_b0 = !game->watch_b0;
 }
 
-void game_display(game_t *game) {
-    matrix_u8_t *buffer_to_watch = game->watch_b0 ? game->b0 : game->b1; 
+void game_render(game_t *game, SDL_Renderer *renderer) {
+    matrix_u8_t *buffer = game->watch_b0 ? game->b0 : game->b1;  
 
-    putchar('\n');
-    for (int i = 0; i < buffer_to_watch->nrows; ++i) {
-        for (int j = 0; j < buffer_to_watch->ncols; ++j) {
-            int cell = matrix_get(buffer_to_watch, i, j) != 0 ? 1 : 0;
-            printf("%d ", cell);
+    // display
+    SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
+    for (int i = 0; i < buffer->nrows; ++i) {
+        for (int j = 0; j < buffer->ncols; ++j) {
+            int cell = matrix_get(buffer, i, j) != 0;
+            
+            if (cell) {
+                SDL_FRect rect = { 
+                    .x = (float)i * BOX_W, 
+                    .y = (float)j * BOX_H, 
+                    .w = (float)BOX_W, 
+                    .h = (float)BOX_H 
+                };
+                SDL_RenderFillRect(renderer, &rect);
+            }
         }
-        putchar('\n');
     }
 }
 
