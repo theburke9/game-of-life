@@ -9,9 +9,7 @@ static bool check_matrix_boundaries(const matrix_u8_t *matrix, int i, int j);
 static bool compute_data_size(int a, int b, size_t *out);
 static size_t matrix_index(const matrix_u8_t *matrix, int i, int j);
 
-/**
- * CREATION AND DESTRUCTION
- */
+/* CREATION AND DESTRUCTION */
 
 matrix_u8_t *matrix_create(int nrows, int ncols) {
     size_t matrix_struct_size = sizeof(matrix_u8_t);
@@ -35,9 +33,7 @@ void matrix_destroy(matrix_u8_t *matrix) {
     if (matrix) free(matrix);
 }
 
-/**
- * GETTER AND SETTER
- */
+/* GETTER AND SETTER */
 
 uint8_t matrix_get(const matrix_u8_t *matrix, int i, int j) {
     if (!check_matrix_boundaries(matrix, i, j)) return 0;
@@ -54,9 +50,7 @@ void matrix_fill(matrix_u8_t *matrix, uint8_t value) {
     memset(matrix->data, value, matrix->size);
 }
 
-/**
- * STATIC FUNCTIONS
- */
+/* STATIC FUNCTIONS */
 
 static bool check_matrix_ptr(const matrix_u8_t *matrix) {
     return matrix != NULL && matrix->data != NULL;
