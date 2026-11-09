@@ -28,11 +28,11 @@ int main(int argc, char *argv[]) {
     }
             
     game_t *game = game_create(WINDOW_WIDTH, WINDOW_HEIGHT);
-    matrix_set(game->b0, 11, 10, 1);
-    matrix_set(game->b0, 12, 11, 1);
-    matrix_set(game->b0, 10, 12, 1);
-    matrix_set(game->b0, 11, 12, 1);
-    matrix_set(game->b0, 12, 12, 1);
+    matrix_set(game->grids[0], 4, 3, 1);
+    matrix_set(game->grids[0], 5, 4, 1);
+    matrix_set(game->grids[0], 3, 5, 1);
+    matrix_set(game->grids[0], 4, 5, 1);
+    matrix_set(game->grids[0], 5, 5, 1);
 	
 	bool isRunning = true;
     while (isRunning) {
