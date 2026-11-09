@@ -35,18 +35,27 @@ int main(int argc, char *argv[]) {
     matrix_set(game->grids[0], 5, 5, 1);
 	
 	bool isRunning = true;
+    bool isPause = false;
     while (isRunning) {
 		SDL_Event event;
 		while(SDL_PollEvent(&event)) {
 			if (event.type == SDL_EVENT_QUIT) {
 				isRunning = false;
 			}
+
+            if (event.type == SDL_EVENT_KEY_DOWN) {
+                if (event.key.key == SDLK_SPACE) {
+                    isPause = !isPause;
+                }
+            }
 		}
 
         SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
         SDL_RenderClear(renderer);
 
-        game_step(game);
+        if (!isPause)
+            game_step(game);
+        
         game_render(game, renderer);
 
         SDL_RenderPresent(renderer);
