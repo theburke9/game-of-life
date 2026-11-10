@@ -1,13 +1,11 @@
 #include "game/game.h"
+#include "game/config.h"
+#include "render/render.h"
 
 #include <SDL3/SDL.h>
 #include <SDL3/SDL_main.h>
 
 #include <stdio.h>
-
-#define WINDOW_TITLE 	"Game of life"
-#define WINDOW_WIDTH 	640
-#define WINDOW_HEIGHT 	480
 
 int main(int argc, char *argv[]) {
     if (!SDL_Init(SDL_INIT_VIDEO)) {

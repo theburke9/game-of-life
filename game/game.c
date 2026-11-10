@@ -1,11 +1,9 @@
 #include "game/game.h"
+#include "game/config.h"
 
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
-
-#define BOX_W   20
-#define BOX_H   20
 
 static bool check_game_ptr(game_t *game);
 static int count_neighbors(matrix_u8_t *matrix, int i, int j);
@@ -15,8 +13,8 @@ static int count_neighbors(matrix_u8_t *matrix, int i, int j);
 game_t *game_create(int window_width, int window_height) {
     if (window_width <= 0 || window_height <= 0) return NULL;
 
-    int nrows = window_width / BOX_W;
-    int ncols = window_height / BOX_H;
+    int nrows = window_width / GAME_CELL_W;
+    int ncols = window_height / GAME_CELL_H;
 
     matrix_u8_t *matrix0 = matrix_create(nrows, ncols);
     if (matrix0 == NULL) return NULL;
@@ -67,33 +65,10 @@ void game_step(game_t *game) {
     game->current = 1 - game->current;
 }
 
-void game_render(game_t *game, SDL_Renderer *renderer) {
-    if (!check_game_ptr(game)) return;
-
-    matrix_u8_t *matrix = game->grids[game->current];  
-
-    SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
-    for (int i = 0; i < matrix->nrows; ++i) {
-        for (int j = 0; j < matrix->ncols; ++j) {
-            int cell = matrix_get(matrix, i, j) != 0;
-            
-            if (cell) {
-                SDL_FRect rect = { 
-                    .x = (float)i * BOX_W, 
-                    .y = (float)j * BOX_H, 
-                    .w = (float)BOX_W, 
-                    .h = (float)BOX_H 
-                };
-                SDL_RenderFillRect(renderer, &rect);
-            }
-        }
-    }
-}
-
 void game_click(game_t *game, int mouse_x, int mouse_y) {
     if (!check_game_ptr(game)) return;
-    int block_x = mouse_x / BOX_W;
-    int block_y = mouse_y / BOX_H;
+    int block_x = mouse_x / GAME_CELL_W;
+    int block_y = mouse_y / GAME_CELL_H;
     int cell = matrix_get(game->grids[game->current], block_x, block_y) != 0;
     matrix_set(game->grids[game->current], block_x, block_y, !cell);
 }
