@@ -1,5 +1,5 @@
-#ifndef GOL_MATRIX_H
-#define GOL_MATRIX_H
+#ifndef CORE_MATRIX_H
+#define CORE_MATRIX_H
 
 #include <stdint.h>
 #include <stddef.h>
@@ -18,4 +18,4 @@ uint8_t matrix_get(const matrix_u8_t *matrix, int i, int j);
 void matrix_set(matrix_u8_t *matrix, int i, int j, uint8_t value);
 void matrix_fill(matrix_u8_t *matrix, uint8_t value);
 
-#endif // GOL_MATRIX_H
+#endif // CORE_MATRIX_H

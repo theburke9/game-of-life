@@ -1,7 +1,7 @@
 #ifndef GAME_H
 #define GAME_H
 
-#include "matrix.h"
+#include "core/matrix.h"
 #include <SDL3/SDL.h>
 
 typedef struct {
