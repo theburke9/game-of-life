@@ -51,8 +51,8 @@ cmake --build build
 ## TODO
 
 - [ ] Restructure the project
-  - [ ] Create the `core` folder and the `game` and `render` modules
-  - [ ] Move `matrix.c`/`matrix.h` and `game.c`/`game.h` with `git mv` (to preserve history)
+  - [x] Create the `core` folder and the `game` and `render` modules
+  - [x] Move `matrix.c`/`matrix.h` and `game.c`/`game.h` with `git mv` (to preserve history)
   - [ ] Make sure `core` and `game` depend on neither SDL nor a display (only `render` should include it)
 - [ ] Add unit tests
 - [ ] Improve the UI
